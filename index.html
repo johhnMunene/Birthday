@@ -10,7 +10,8 @@
         margin: 0;
         padding: 0;
         overflow: hidden;
-        background: transparent;
+        background: linear-gradient(to bottom right, #ffd5ec, #ffc1f3);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       }
 
       .fade-in {
@@ -26,57 +27,57 @@
         }
       }
 
-      .falling-item {
+      .falling {
         position: absolute;
         top: -50px;
         font-size: 2rem;
+        font-weight: bold;
         animation: fall linear forwards;
         pointer-events: none;
+        opacity: 0.9;
         z-index: 0;
       }
 
       @keyframes fall {
         to {
-          transform: translateY(120vh) rotate(360deg);
-          opacity: 0.9;
+          transform: translateY(110vh) rotate(360deg);
+          opacity: 1;
         }
       }
     </style>
   </head>
 
-  <body class="relative backdrop-blur-md bg-white/10 flex items-center justify-center min-h-screen">
+  <body class="relative flex items-center justify-center min-h-screen text-center">
 
-    <!-- 🎵 Background Music -->
-    <audio id="birthday-song" autoplay loop>
+    <!-- 🔊 Background Music -->
+    <audio id="bg-music" autoplay loop>
       <source src="happy-birthday.mp3" type="audio/mpeg" />
       Your browser does not support the audio element.
     </audio>
 
     <!-- 🎉 Main Content -->
-    <div class="z-10 text-center px-4 max-w-2xl">
-      <h1 class="text-5xl md:text-7xl font-extrabold text-pink-600 animate-bounce mb-2">
+    <div class="z-10 px-6 max-w-xl">
+      <h1 class="text-5xl md:text-6xl font-extrabold text-pink-600 drop-shadow-lg mb-4">
         🎉 Happy Birthday!
       </h1>
-      <h2 class="text-3xl md:text-4xl text-orange-600 font-semibold mb-6">Dear Lena</h2>
-
-      <div id="message" class="space-y-4 text-xl md:text-2xl text-rose-900 leading-relaxed"></div>
-
-      <footer class="mt-8 text-sm text-pink-700">Made with 💖 for Lena's special day</footer>
+      <h2 class="text-3xl text-orange-600 font-semibold mb-6">Dear Lena</h2>
+      <div id="line-message" class="space-y-3 text-2xl text-rose-900 leading-relaxed"></div>
+      <p class="mt-8 text-sm text-pink-700">Made with 💖 just for you.</p>
     </div>
 
-    <!-- 🎊 Falling Emojis -->
+    <!-- 🎊 Falling Items -->
     <div id="falling-container" class="absolute top-0 left-0 w-full h-full z-0 pointer-events-none"></div>
 
     <script>
-      // 💬 Animated Line-by-Line Message
+      // 💬 Messages to show line-by-line
       const messageLines = [
         "Wishing you a day filled with happiness, laughter, and all your favorite things!",
         "May this special day bring you joy, love, and wonderful memories that will last forever.",
-        "You're amazing, and today is all about you!",
-        "🎂 🎈 🍫 🧸 🌸"
+        "You're amazing, and today is all about you! 💖",
+        "🎂 🎈 🍫 🧸 🌸",
       ];
 
-      const messageContainer = document.getElementById("message");
+      const messageContainer = document.getElementById("line-message");
 
       function showMessages() {
         messageLines.forEach((line, index) => {
@@ -85,13 +86,13 @@
             p.textContent = line;
             p.className = "fade-in";
             messageContainer.appendChild(p);
-          }, index * 2500);
+          }, index * 3000); // One line every 3s
         });
       }
 
-      // 🎵 Audio Play with Fallback
+      // 🎵 Music fallback if browser blocks autoplay
       window.onload = () => {
-        const audio = document.getElementById("birthday-song");
+        const audio = document.getElementById("bg-music");
         audio.volume = 0.5;
         audio.play().catch(() => {
           document.body.addEventListener("click", () => audio.play(), { once: true });
@@ -100,25 +101,23 @@
         showMessages();
       };
 
-      // 🎊 Falling Emojis Logic
-      const items = ['🧸', '🍫', '🌸', '🎈'];
+      // 🎊 Falling Emojis including teddy bears
+      const fallItems = ["🧸", "❤️", "💖", "🎈", "🌸", "LENA"];
       const container = document.getElementById("falling-container");
 
       function createFallingItem() {
-        const item = document.createElement("div");
-        item.className = "falling-item";
-        item.innerText = items[Math.floor(Math.random() * items.length)];
-        item.style.left = `${Math.random() * 100}%`;
-        item.style.animationDuration = `${5 + Math.random() * 5}s`;
-        item.style.fontSize = `${1.5 + Math.random() * 2.5}rem`;
-        item.style.opacity = 0.9;
-        container.appendChild(item);
-
-        setTimeout(() => item.remove(), 10000);
+        const el = document.createElement("div");
+        el.className = "falling";
+        el.textContent = fallItems[Math.floor(Math.random() * fallItems.length)];
+        el.style.left = `${Math.random() * 100}%`;
+        el.style.animationDuration = `${4 + Math.random() * 5}s`;
+        el.style.fontSize = `${1.5 + Math.random() * 2.5}rem`;
+        el.style.color = ["#ff4d6d", "#ff85a1", "#ff69b4", "#e91e63"][Math.floor(Math.random() * 4)];
+        container.appendChild(el);
+        setTimeout(() => el.remove(), 10000);
       }
 
-      // Keep generating falling emojis
-      setInterval(createFallingItem, 300);
+      setInterval(createFallingItem, 250);
     </script>
   </body>
 </html>
