@@ -1,141 +1,200 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>🎉 Happy Birthday Lena!</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-      body {
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-        background: linear-gradient(to bottom, #ffc0cb, #fff0f5);
-        background-repeat: no-repeat;
-        background-size: cover;
-        position: relative;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🎉 Happy Birthday Lena!</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: linear-gradient(to bottom, #ffc0cb, #ffe4e1);
+    }
 
-      .twinkle {
-        animation: twinkle 1.5s infinite alternate;
-      }
+    .fade-in {
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fadeIn 1s ease-out forwards;
+    }
 
-      @keyframes twinkle {
-        0% { opacity: 1; text-shadow: 0 0 5px #fff; }
-        100% { opacity: 0.7; text-shadow: 0 0 20px #ff69b4; }
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
       }
+    }
 
-      .fade-in {
+    .falling-item {
+      position: absolute;
+      top: -50px;
+      font-size: 2rem;
+      animation: fall linear forwards;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(120vh) rotate(360deg);
+        opacity: 0.8;
+      }
+    }
+
+    .twinkle {
+      animation: twinkle 1.5s infinite alternate ease-in-out;
+    }
+
+    @keyframes twinkle {
+      0% {
+        opacity: 0.7;
+        text-shadow: 0 0 10px #fff, 0 0 20px #ff69b4;
+      }
+      100% {
+        opacity: 1;
+        text-shadow: 0 0 15px #fff, 0 0 30px #ff1493;
+      }
+    }
+
+    .glitter {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: white;
+      border-radius: 50%;
+      animation: glitterAnim 3s linear infinite;
+      opacity: 0.8;
+    }
+
+    @keyframes glitterAnim {
+      0% {
+        transform: translateY(0) scale(1);
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(100vh) scale(1.5);
         opacity: 0;
-        transform: translateY(10px);
-        animation: fadeIn 1s ease-out forwards;
       }
+    }
+  </style>
+</head>
 
-      @keyframes fadeIn {
-        to {
-          opacity: 1;
-          transform: translateY(0);
+<body class="relative backdrop-blur-md flex items-center justify-center min-h-screen">
+
+  <!-- 🎵 Background Music -->
+  <audio id="birthday-song" autoplay loop>
+    <source src="./Mr-Instrumental-happy-birthday-funk-spot.mp3" type="audio/mpeg" />
+    Your browser does not support the audio element.
+  </audio>
+
+  <!-- 🎉 Main Content -->
+  <div class="z-10 text-center px-4 max-w-2xl">
+    <h1 class="text-5xl md:text-7xl font-extrabold text-pink-600 twinkle mb-2">
+      🎉 Happy Birthday!
+    </h1>
+    <h2 class="text-3xl md:text-4xl text-rose-600 font-bold twinkle mb-6">Dear Lena</h2>
+
+    <div id="message" class="space-y-4 text-xl md:text-2xl text-rose-900 leading-relaxed"></div>
+
+    <!-- ⏳ Countdown Timer -->
+    <div id="countdown" class="mt-6 text-lg font-medium text-rose-800"></div>
+
+    <!-- 💖 Footer -->
+    <footer class="mt-8 text-sm text-pink-700">Made with 💖 for Lena's special day</footer>
+  </div>
+
+  <!-- 🌸 Falling Emojis -->
+  <div id="falling-container" class="absolute top-0 left-0 w-full h-full z-0 pointer-events-none"></div>
+
+  <!-- ✨ Glitter -->
+  <script>
+    const glitterCount = 50;
+    for (let i = 0; i < glitterCount; i++) {
+      const glitter = document.createElement("div");
+      glitter.className = "glitter";
+      glitter.style.left = `${Math.random() * 100}%`;
+      glitter.style.top = `${Math.random() * -100}px`;
+      glitter.style.animationDuration = `${2 + Math.random() * 3}s`;
+      glitter.style.opacity = Math.random();
+      document.body.appendChild(glitter);
+    }
+  </script>
+
+  <!-- 🎉 Script -->
+  <script>
+    const messageLines = [
+      "Wishing you a day filled with happiness, laughter, and all your favorite things!",
+      "May this special day bring you joy, love, and wonderful memories that will last forever.",
+      "You're amazing, and today is all about you!",
+      "So dance, smile, and shine bright, Lena!",
+      "🎂 🎈 🍫 🧸 🌸"
+    ];
+
+    const messageContainer = document.getElementById("message");
+
+    function showMessages() {
+      messageLines.forEach((line, index) => {
+        setTimeout(() => {
+          const p = document.createElement("p");
+          p.textContent = line;
+          p.className = "fade-in";
+          messageContainer.appendChild(p);
+        }, index * 3000); // 3 seconds per line
+      });
+    }
+
+    function startCountdown() {
+      const targetDate = new Date("August 29, 2026 00:00:00").getTime();
+      const countdownElement = document.getElementById("countdown");
+
+      setInterval(() => {
+        const now = new Date().getTime();
+        const distance = targetDate - now;
+
+        if (distance < 0) {
+          countdownElement.innerHTML = "🎉 It's your special day, Lena! 🎉";
+          return;
         }
-      }
 
-      .falling-item {
-        position: absolute;
-        top: -50px;
-        font-size: 2rem;
-        animation: fall linear forwards;
-        pointer-events: none;
-        z-index: 0;
-      }
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-      @keyframes fall {
-        to {
-          transform: translateY(120vh) rotate(360deg);
-          opacity: 0.9;
-        }
-      }
-    </style>
-  </head>
+        countdownElement.innerHTML = `⏳ ${days}d ${hours}h ${minutes}m ${seconds}s until Lena's next birthday!`;
+      }, 1000);
+    }
 
-  <body class="relative flex items-center justify-center min-h-screen">
+    const items = ['🧸', '🍫', '🌸', '🎈'];
+    const container = document.getElementById("falling-container");
 
-    <!-- 🔊 Background Song -->
-    <audio id="birthday-song" autoplay loop>
-      <source src="Mr-Instrumental-happy-birthday-funk-spot.mp3" type="audio/mpeg" />
-      Your browser does not support the audio element.
-    </audio>
+    function createFallingItem() {
+      const item = document.createElement("div");
+      item.className = "falling-item";
+      item.innerText = items[Math.floor(Math.random() * items.length)];
+      item.style.left = `${Math.random() * 100}%`;
+      item.style.animationDuration = `${5 + Math.random() * 5}s`;
+      item.style.fontSize = `${1.5 + Math.random() * 2.5}rem`;
+      container.appendChild(item);
 
-    <!-- 🎉 Main Content -->
-    <div class="z-10 text-center px-4 max-w-2xl">
-      <h1 class="text-5xl md:text-7xl font-extrabold text-pink-600 twinkle mb-2">
-        🎉 Happy Birthday!
-      </h1>
-      <h2 class="text-3xl md:text-4xl text-rose-500 font-semibold twinkle mb-6">
-        Dear Lena
-      </h2>
+      setTimeout(() => item.remove(), 10000);
+    }
 
-      <!-- 🎶 Lyrics / Message -->
-      <div id="message" class="space-y-4 text-xl md:text-2xl text-rose-900 leading-relaxed"></div>
+    setInterval(createFallingItem, 250);
 
-      <footer class="mt-8 text-sm text-pink-700">Made with 💖 for Lena's special day</footer>
-    </div>
+    // 🎵 Play audio after interaction (browser-friendly)
+    window.onload = () => {
+      const audio = document.getElementById("birthday-song");
+      audio.volume = 0.5;
+      audio.play().catch(() => {
+        document.body.addEventListener("click", () => audio.play(), { once: true });
+      });
 
-    <!-- 🎊 Falling Emojis -->
-    <div id="falling-container" class="absolute top-0 left-0 w-full h-full z-0 pointer-events-none"></div>
-
-    <script>
-      // 💬 Message Lyrics
-      const messageLines = [
-        "Wishing you a day filled with happiness, laughter, and all your favorite things!",
-        "May this special day bring you joy, love, and wonderful memories that will last forever.",
-        "You're an incredible soul who lights up every room you enter.",
-        "Today is all about YOU, Lena! 💖",
-        "🎂 🎈 🍫 🧸 🌸"
-      ];
-
-      const messageContainer = document.getElementById("message");
-
-      function showMessages() {
-        messageLines.forEach((line, index) => {
-          setTimeout(() => {
-            const p = document.createElement("p");
-            p.textContent = line;
-            p.className = "fade-in";
-            messageContainer.appendChild(p);
-          }, index * 3000); // 3 seconds between lines
-        });
-      }
-
-      // 🔉 Audio fallback on user interaction
-      window.onload = () => {
-        const audio = document.getElementById("birthday-song");
-        audio.volume = 0.5;
-        audio.play().catch(() => {
-          document.body.addEventListener("click", () => audio.play(), { once: true });
-        });
-
-        showMessages();
-      };
-
-      // 🎈 Falling Emojis (Teddy, Chocolate, Balloon, Lily)
-      const items = ['🧸', '🍫', '🎈', '🌸'];
-      const container = document.getElementById("falling-container");
-
-      function createFallingItem() {
-        const item = document.createElement("div");
-        item.className = "falling-item";
-        item.innerText = items[Math.floor(Math.random() * items.length)];
-        item.style.left = `${Math.random() * 100}%`;
-        item.style.animationDuration = `${5 + Math.random() * 5}s`;
-        item.style.fontSize = `${1.5 + Math.random() * 2.5}rem`;
-        item.style.opacity = 0.9;
-        container.appendChild(item);
-
-        setTimeout(() => item.remove(), 10000);
-      }
-
-      // 🎉 Keep generating falling emojis
-      setInterval(createFallingItem, 300);
-    </script>
-  </body>
+      showMessages();
+      startCountdown();
+    };
+  </script>
+</body>
 </html>
 
