@@ -6,7 +6,6 @@
   <title>🎉 Happy Birthday Lena!</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* 🌸 Background Styling */
     body {
       margin: 0;
       padding: 0;
@@ -16,7 +15,7 @@
       position: relative;
     }
 
-    /* ✨ Glitter Effect */
+    /* ✨ Glitter Background Overlay */
     body::before {
       content: "";
       position: absolute;
@@ -42,12 +41,11 @@
       }
     }
 
-    /* 🎊 Falling Item Style */
+    /* 🎊 Falling Emojis */
     .falling {
       position: absolute;
       top: -50px;
       font-size: 2rem;
-      font-weight: bold;
       animation: fall linear forwards;
       pointer-events: none;
       opacity: 0.9;
@@ -60,10 +58,26 @@
         opacity: 1;
       }
     }
+
+    /* ✨ Twinkle Animation */
+    .twinkle {
+      animation: twinkle 1.5s infinite ease-in-out alternate;
+    }
+
+    @keyframes twinkle {
+      0% {
+        text-shadow: 0 0 5px #fff, 0 0 10px #ff69b4, 0 0 20px #ff69b4;
+        opacity: 0.8;
+      }
+      100% {
+        text-shadow: 0 0 10px #fff, 0 0 25px #ff1493, 0 0 35px #ff69b4;
+        opacity: 1;
+      }
+    }
   </style>
 </head>
 
-<body class="relative flex items-center justify-center min-h-screen text-center">
+<body class="relative flex flex-col items-center justify-start min-h-screen pt-10 text-center">
 
   <!-- 🔊 Background Song -->
   <audio id="birthday-song" autoplay loop>
@@ -71,22 +85,23 @@
     Your browser does not support the audio element.
   </audio>
 
-  <!-- 🎉 Main Content -->
-  <div class="z-10 px-6 max-w-2xl">
-    <h1 class="text-6xl font-extrabold text-pink-600 drop-shadow-xl mb-2 animate-bounce">
+  <!-- 🎉 Header: Happy Birthday & Lena -->
+  <div class="z-10">
+    <h1 class="text-6xl font-extrabold text-pink-600 drop-shadow-xl mb-2 twinkle">
       🎉 Happy Birthday!
     </h1>
-    <h2 class="text-3xl text-rose-700 font-semibold mb-6">Dear Lena 💖</h2>
-    <div id="lyrics" class="text-2xl text-rose-900 font-medium space-y-4 leading-relaxed"></div>
-    <p class="mt-8 text-sm text-rose-600">Made with 🌸 and 💝 by someone who truly cares</p>
+    <h2 class="text-3xl text-rose-700 font-semibold mb-6 twinkle">Dear Lena 💖</h2>
   </div>
+
+  <!-- 🎤 Lyrics -->
+  <div id="lyrics" class="z-10 px-6 max-w-2xl text-2xl text-rose-900 font-medium space-y-4 leading-relaxed"></div>
+  <p class="mt-8 text-sm text-rose-600 z-10">Made with 🌸 and 💝 by someone who truly cares</p>
 
   <!-- 🎊 Falling Decorations -->
   <div id="falling-container" class="absolute top-0 left-0 w-full h-full z-0 pointer-events-none"></div>
 
   <!-- 🎯 Script -->
   <script>
-    // 🌟 Lyrics / Message lines
     const lyrics = [
       "Wishing you a day filled with laughter and sunshine,",
       "With chocolates sweet and roses divine. 🍫🌹",
@@ -111,21 +126,22 @@
           p.textContent = line;
           p.className = "fade-in";
           lyricsContainer.appendChild(p);
-        }, i * 3000); // 3s per line
+        }, i * 3000); // 3 seconds per line
       });
     }
 
-    // 🎵 Audio fallback
+    // 🎵 Play audio on load (with fallback)
     window.onload = () => {
       const audio = document.getElementById("birthday-song");
       audio.volume = 0.5;
       audio.play().catch(() => {
         document.body.addEventListener("click", () => audio.play(), { once: true });
       });
+
       showLyrics();
     };
 
-    // 🎊 Falling Items (teddy, chocolate, etc.)
+    // 🎊 Falling Emojis
     const fallItems = ["🧸", "🍫", "🎈", "🌹", "💖", "✨"];
     const container = document.getElementById("falling-container");
 
