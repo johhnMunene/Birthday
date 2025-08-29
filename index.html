@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🎉 Happy Birthday Lena!</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      .text-glow {
+        text-shadow: 0 0 10px #ff69b4, 0 0 20px #ff69b4, 0 0 30px #ff1493;
+      }
+
+      .fade-in {
+        opacity: 0;
+        transform: translateY(10px);
+        animation: fadeIn 1s ease-out forwards;
+      }
+
+      @keyframes fadeIn {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    </style>
+  </head>
+  <body
+    class="min-h-screen bg-gradient-to-b from-pink-100 to-yellow-100 flex flex-col justify-center items-center text-center p-4 font-sans relative"
+  >
+    <!-- 🎵 Audio: Plays on loop -->
+    <audio id="birthday-song" autoplay loop>
+      <source src="happy-birthday.mp3" type="audio/mpeg" />
+      Your browser does not support the audio element.
+    </audio>
+
+    <!-- 🎉 Header -->
+    <h1
+      class="text-5xl md:text-7xl font-extrabold text-pink-600 animate-bounce text-glow mb-4"
+    >
+      🎉 Happy Birthday!
+    </h1>
+    <h2 class="text-3xl text-orange-600 mb-8 font-semibold">Dear Lena</h2>
+
+    <!-- 💬 Message lines appear one-by-one -->
+    <div
+      id="message"
+      class="space-y-4 text-xl md:text-2xl text-rose-800 leading-relaxed max-w-2xl"
+    ></div>
+
+    <!-- 📝 Footer -->
+    <footer class="mt-12 text-sm text-pink-700">
+      Made with 💖 for Lena's special day
+    </footer>
+
+    <script>
+      const messageLines = [
+        "Wishing you a day filled with happiness, laughter, and all your favorite things!",
+        "May this special day bring you joy, love, and wonderful memories that will last forever.",
+        "🎂 🎈 🎁 🌹"
+      ];
+
+      const messageContainer = document.getElementById("message");
+
+      function showMessages() {
+        messageLines.forEach((line, index) => {
+          setTimeout(() => {
+            const p = document.createElement("p");
+            p.textContent = line;
+            p.className = "fade-in";
+            messageContainer.appendChild(p);
+          }, index * 2500); // Delay each line
+        });
+      }
+
+      // Handle autoplay (with fallback if blocked)
+      window.onload = () => {
+        const audio = document.getElementById("birthday-song");
+        audio.volume = 0.5;
+
+        // Try to play immediately
+        audio
+          .play()
+          .catch(() => {
+            // Autoplay blocked? Wait for user interaction
+            document.body.addEventListener(
+              "click",
+              () => {
+                audio.play();
+              },
+              { once: true }
+            );
+          });
+
+        // Start showing messages
+        showMessages();
+      };
+    </script>
+  </body>
+</html>
