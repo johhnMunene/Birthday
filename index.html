@@ -6,6 +6,11 @@
     <title>🎉 Happy Birthday Lena!</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+      body {
+        background: transparent;
+        overflow: hidden;
+      }
+
       .text-glow {
         text-shadow: 0 0 10px #ff69b4, 0 0 20px #ff69b4, 0 0 30px #ff1493;
       }
@@ -22,37 +27,52 @@
           transform: translateY(0);
         }
       }
+
+      .falling-item {
+        position: absolute;
+        top: -50px;
+        font-size: 2rem;
+        animation: fall linear forwards;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      @keyframes fall {
+        to {
+          transform: translateY(120vh) rotate(360deg);
+          opacity: 0.9;
+        }
+      }
     </style>
   </head>
-  <body
-    class="min-h-screen bg-gradient-to-b from-pink-100 to-yellow-100 flex flex-col justify-center items-center text-center p-4 font-sans relative"
-  >
-    <!-- 🎵 Audio: Plays on loop -->
+
+  <body class="relative backdrop-blur-sm bg-white/10">
+
+    <!-- 🎵 Audio -->
     <audio id="birthday-song" autoplay loop>
       <source src="happy-birthday.mp3" type="audio/mpeg" />
       Your browser does not support the audio element.
     </audio>
 
     <!-- 🎉 Header -->
-    <h1
-      class="text-5xl md:text-7xl font-extrabold text-pink-600 animate-bounce text-glow mb-4"
-    >
+    <h1 class="text-5xl md:text-7xl font-extrabold text-pink-600 animate-bounce text-glow mt-10 text-center">
       🎉 Happy Birthday!
     </h1>
-    <h2 class="text-3xl text-orange-600 mb-8 font-semibold">Dear Lena</h2>
+    <h2 class="text-3xl text-orange-600 mb-8 font-semibold text-center">Dear Lena</h2>
 
-    <!-- 💬 Message lines appear one-by-one -->
-    <div
-      id="message"
-      class="space-y-4 text-xl md:text-2xl text-rose-800 leading-relaxed max-w-2xl"
-    ></div>
+    <!-- 💬 Message -->
+    <div id="message" class="space-y-4 text-xl md:text-2xl text-rose-800 leading-relaxed max-w-2xl mx-auto text-center"></div>
+
+    <!-- 🎊 Falling Items -->
+    <div id="falling-container" class="absolute top-0 left-0 w-full h-full z-0 pointer-events-none"></div>
 
     <!-- 📝 Footer -->
-    <footer class="mt-12 text-sm text-pink-700">
+    <footer class="mt-12 text-sm text-pink-700 text-center relative z-10">
       Made with 💖 for Lena's special day
     </footer>
 
     <script>
+      // 🌟 Animated Message
       const messageLines = [
         "Wishing you a day filled with happiness, laughter, and all your favorite things!",
         "May this special day bring you joy, love, and wonderful memories that will last forever.",
@@ -68,32 +88,45 @@
             p.textContent = line;
             p.className = "fade-in";
             messageContainer.appendChild(p);
-          }, index * 2500); // Delay each line
+          }, index * 2500);
         });
       }
 
-      // Handle autoplay (with fallback if blocked)
+      // 🎵 Autoplay fallback
       window.onload = () => {
         const audio = document.getElementById("birthday-song");
         audio.volume = 0.5;
 
-        // Try to play immediately
-        audio
-          .play()
-          .catch(() => {
-            // Autoplay blocked? Wait for user interaction
-            document.body.addEventListener(
-              "click",
-              () => {
-                audio.play();
-              },
-              { once: true }
-            );
-          });
+        audio.play().catch(() => {
+          document.body.addEventListener(
+            "click",
+            () => audio.play(),
+            { once: true }
+          );
+        });
 
-        // Start showing messages
         showMessages();
       };
+
+      // 🎊 Falling Emojis
+      const items = ['🧸', '🍫', '🌸', '🎈']; // teddy, chocolate, lily, balloon
+      const container = document.getElementById("falling-container");
+
+      function createFallingItem() {
+        const item = document.createElement("div");
+        item.className = "falling-item";
+        item.innerText = items[Math.floor(Math.random() * items.length)];
+        item.style.left = `${Math.random() * 100}%`;
+        item.style.animationDuration = `${5 + Math.random() * 5}s`;
+        item.style.fontSize = `${1.5 + Math.random() * 2.5}rem`;
+        item.style.opacity = 0.9;
+        container.appendChild(item);
+
+        setTimeout(() => item.remove(), 10000);
+      }
+
+      // Keep dropping items
+      setInterval(createFallingItem, 300);
     </script>
   </body>
 </html>
