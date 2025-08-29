@@ -7,12 +7,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
       body {
-        background: transparent;
+        margin: 0;
+        padding: 0;
         overflow: hidden;
-      }
-
-      .text-glow {
-        text-shadow: 0 0 10px #ff69b4, 0 0 20px #ff69b4, 0 0 30px #ff1493;
+        background: transparent;
       }
 
       .fade-in {
@@ -46,37 +44,36 @@
     </style>
   </head>
 
-  <body class="relative backdrop-blur-sm bg-white/10">
+  <body class="relative backdrop-blur-md bg-white/10 flex items-center justify-center min-h-screen">
 
-    <!-- 🎵 Audio -->
+    <!-- 🎵 Background Music -->
     <audio id="birthday-song" autoplay loop>
       <source src="happy-birthday.mp3" type="audio/mpeg" />
       Your browser does not support the audio element.
     </audio>
 
-    <!-- 🎉 Header -->
-    <h1 class="text-5xl md:text-7xl font-extrabold text-pink-600 animate-bounce text-glow mt-10 text-center">
-      🎉 Happy Birthday!
-    </h1>
-    <h2 class="text-3xl text-orange-600 mb-8 font-semibold text-center">Dear Lena</h2>
+    <!-- 🎉 Main Content -->
+    <div class="z-10 text-center px-4 max-w-2xl">
+      <h1 class="text-5xl md:text-7xl font-extrabold text-pink-600 animate-bounce mb-2">
+        🎉 Happy Birthday!
+      </h1>
+      <h2 class="text-3xl md:text-4xl text-orange-600 font-semibold mb-6">Dear Lena</h2>
 
-    <!-- 💬 Message -->
-    <div id="message" class="space-y-4 text-xl md:text-2xl text-rose-800 leading-relaxed max-w-2xl mx-auto text-center"></div>
+      <div id="message" class="space-y-4 text-xl md:text-2xl text-rose-900 leading-relaxed"></div>
 
-    <!-- 🎊 Falling Items -->
+      <footer class="mt-8 text-sm text-pink-700">Made with 💖 for Lena's special day</footer>
+    </div>
+
+    <!-- 🎊 Falling Emojis -->
     <div id="falling-container" class="absolute top-0 left-0 w-full h-full z-0 pointer-events-none"></div>
 
-    <!-- 📝 Footer -->
-    <footer class="mt-12 text-sm text-pink-700 text-center relative z-10">
-      Made with 💖 for Lena's special day
-    </footer>
-
     <script>
-      // 🌟 Animated Message
+      // 💬 Animated Line-by-Line Message
       const messageLines = [
         "Wishing you a day filled with happiness, laughter, and all your favorite things!",
         "May this special day bring you joy, love, and wonderful memories that will last forever.",
-        "🎂 🎈 🎁 🌹"
+        "You're amazing, and today is all about you!",
+        "🎂 🎈 🍫 🧸 🌸"
       ];
 
       const messageContainer = document.getElementById("message");
@@ -92,24 +89,19 @@
         });
       }
 
-      // 🎵 Autoplay fallback
+      // 🎵 Audio Play with Fallback
       window.onload = () => {
         const audio = document.getElementById("birthday-song");
         audio.volume = 0.5;
-
         audio.play().catch(() => {
-          document.body.addEventListener(
-            "click",
-            () => audio.play(),
-            { once: true }
-          );
+          document.body.addEventListener("click", () => audio.play(), { once: true });
         });
 
         showMessages();
       };
 
-      // 🎊 Falling Emojis
-      const items = ['🧸', '🍫', '🌸', '🎈']; // teddy, chocolate, lily, balloon
+      // 🎊 Falling Emojis Logic
+      const items = ['🧸', '🍫', '🌸', '🎈'];
       const container = document.getElementById("falling-container");
 
       function createFallingItem() {
@@ -125,8 +117,9 @@
         setTimeout(() => item.remove(), 10000);
       }
 
-      // Keep dropping items
+      // Keep generating falling emojis
       setInterval(createFallingItem, 300);
     </script>
   </body>
 </html>
+
